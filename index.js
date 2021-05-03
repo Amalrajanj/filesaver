@@ -47,17 +47,14 @@ bot.start(async(ctx)=>{
     }else{
         file = await saver.getFile(query).then((res)=>{
             console.log(res);
-            file = await saver.getFile(query).then((res)=>{
-                console.log(res);
-                if(res.type=='video'){
-                    ctx.replyWithVideo(res.file_id,{caption:`<b>${res.caption}</b>`,
-                parse_mode:'HTML'})
-                }else{
-                    ctx.replyWithDocument(res.file_id,{caption:`<b>${res.caption}</b>`,
-                parse_mode:'HTML'})
-                }
-                
-            })
+            if(res.type=='video'){
+                ctx.replyWithVideo(res.file_id,{caption:`<b>${res.caption}</b>`,
+            parse_mode:'HTML'})
+            }else{
+                ctx.replyWithDocument(res.file_id,{caption:`<b>${res.caption}</b>`,
+            parse_mode:'HTML'})
+            }
+            
         })
     }
     //saving user details to the database
