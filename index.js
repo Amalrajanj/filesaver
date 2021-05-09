@@ -143,6 +143,46 @@ bot.on('document',(ctx)=>{
     ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${document.file_unique_id}`)
 })
 
+bot.on('video',(ctx)=>{
+    video = ctx.message.video
+    console.log(ctx);
+    fileDetails ={
+        file_name:video.file_name,
+        file_id:video.file_id,
+        caption:ctx.message.caption,
+        file_size:video.file_size,
+        uniqueId:video.file_unique_id,
+        type:'video'
+    }
+    console.log(fileDetails.caption);
+    saver.saveFile(fileDetails)
+    ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${video.file_unique_id}`)
+    ctx.replyWithVideo(video.file_id,{
+        chat_id:-1001311265348,
+        caption:ctx.message.caption
+    })
+})
+
+bot.on('audio',(ctx)=>{
+    audio = ctx.message.audio
+    console.log(ctx);
+    fileDetails ={
+        file_name:audio.file_name,
+        file_id:audio.file_id,
+        caption:ctx.message.caption,
+        file_size:audio.file_size,
+        uniqueId:audio.file_unique_id,
+        type:'audio'
+    }
+    console.log(fileDetails.caption);
+    saver.saveFile(fileDetails)
+    ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${audio.file_unique_id}`)
+    ctx.replyWithDocument(audio.file_id,{
+        chat_id:-1001311265348,
+        caption:ctx.message.caption
+    })
+})
+
 //checking bot status only for admins 
 
 bot.command('stats',async(ctx)=>{
