@@ -6,7 +6,7 @@ Bot generates sharable link inside telegram for documents and make files public 
 </a>
 
 <a href="https://youtu.be/zw_ijvhzomI">
-<img src="https://image.flaticon.com/icons/png/128/1384/1384060.png" alt="Youtube tutorial">Watch how to host
+Click here to watch how to host
 </a>
 
 required details 
