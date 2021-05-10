@@ -5,6 +5,9 @@ Bot generates sharable link inside telegram for documents and make files public 
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
+<a href="https://youtu.be/zw_ijvhzomI">
+<img src="https://image.flaticon.com/icons/png/128/1384/1384060.png" alt="Youtube tutorial">Watch how to host
+</a>
 
 required details 
 
