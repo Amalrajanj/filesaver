@@ -59,5 +59,62 @@ module.exports={
                 resolve(res)
             }) 
            })
+    },
+
+    //removing file with file_id
+
+    removeFile:(fileId)=>{
+        db.get().collection(collection.FILE_COLLECTION).removeOne({file_id:fileId})
+    },
+
+    //ban user with user ID
+    banUser:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.BANNED_COLLECTION).insertOne(id).then((res)=>{
+                resolve(res)
+            })
+        })
+    },
+
+    //Checking if user is banned or not to acess the bot
+
+    checkBan:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.BANNED_COLLECTION).findOne({id:id}).then((res)=>{
+                console.log(res);
+                if(res){
+                    resolve(true)
+                }else{
+                    resolve(false)
+                }
+            })
+        })
+    },
+
+    //unban the user with user ID
+
+    unBan:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+           await db.get().collection(collection.BANNED_COLLECTION).deleteOne(id).then((res)=>{
+                console.log(res);
+                resolve(res)
+            })
+        })
+    },
+
+    //remove the whole collection to remove all files
+
+    deleteCollection:()=>{
+        db.get().collection(collection.FILE_COLLECTION).deleteMany({}).then((res)=>{
+            console.log(res);
+        })
+    },
+    //removing all files send by a user
+    
+    removeUserFile:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.FILE_COLLECTION).deleteMany({userId:id}).then((res)=>
+            resolve(res))
+        })
     }
 }

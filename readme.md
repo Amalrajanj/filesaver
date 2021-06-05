@@ -20,15 +20,70 @@ required details
 <code>BOTUSERNAME</code> - your bot username without '@'
 
 <code>DB_URL</code> - create an account on https://www.mongodb.com/cloud/atlas , database name - mediaFile ,collection name - fileBackup.Click connect and choose 'connect your application'.Copy the link and replace "< password >" with password of user having acess to db and replace "myFirstDatabase" to "mediaFile"
-  
 
-<h1>Admin features</h1>
+<code>LOG_CHANNEL</code> - create a private channel and get channel ID (if you cant get channel id forward any message from channel to @getidsbot it may look something like -1001234567899)  
+<hr>
 
-<code>/send broadcast message</code> - Send broadcast to all users
-<code>/stats</code> - Get number of bot users
+<h1>Here are some of the admin commands and usage</h1>
 
-<h2>DEMERITS</h2>
-1.It won't generate link for video files
 
-i will fix it soon
+1.How to ban and unban users
+
+
+<code>/ban</code> userID
+
+<code>/unban</code> userID
+
+(Get userID from log channel)
+
+
+<h2>How to remove files from bot</h2>
+
+
+you can remove files 3 ways
+
+ ⚫ Remove individual files with file_id
+
+ ⚫ Remove all files send by a user
+
+ ⚫ Remove all files send to the bot
+
+
+    Remove individual files with file_id
+
+<code>/rem</code> file_id
+
+(This will remove files one by one as you give file_id,Get file_id from log channel)
+
+
+    Remove all files send by a user
+
+<code>/remall</code> userID
+
+(You can remove all files send by a particular user if user is sending abusive contents or spam ,Get the userID from log channel)
+
+
+    Remove all files send to b0t
+
+<code>/clear</code>
+
+(This will remove all files send to the bot permenantly)
+
+
+3.Send message to users
+
+<code>/send</code> your message to be broadcasted
+
+(You can broadcast text messages to your users ,the message will be send from last joined user to first joined user to reduce spam.Try not to send too many messages at a single time if you have a large number of users)
+
+
+4.How to know total bot users
+
+<code>/stats</code>
+
+(You will get total users started your bot,Real time data will be updated after a succesfull broadcast)
+
+
+
+<b>If you wish to support me follow me on github as a token of support</b>
 

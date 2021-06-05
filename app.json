@@ -24,6 +24,10 @@
         "BOTUSERNAME":{
             "description":"Enter your bot username without @",
             "value":"botusername"
+        },
+        "LOG_CHANNEL":{
+            "description":"create a private channel and enter channel id to monitor files,get user and file data",
+            "value":"channel"
         }
         
         	

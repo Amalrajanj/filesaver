@@ -80,9 +80,51 @@ bot.command('/help',(ctx)=>{
             ]
         }    
     })
+    if(ctx.from.id==process.env.ADMIN){
+        ctx.reply('https://telegra.ph/Filesaver-Admin-commands-06-05')
+    }
 })
 
-//broadcasting message to bot users
+//remove files with file_id
+
+bot.command('rem', (ctx) => {
+    msg = ctx.message.text
+    let msgArray = msg.split(' ')
+    msgArray.shift()
+    let text = msgArray.join(' ')
+    console.log(text);
+    if(ctx.from.id ==process.env.ADMIN){
+        saver.removeFile(text)
+        ctx.reply('✅Removed')
+    }
+})
+
+//remove whole collection(remove all files)
+
+bot.command('clear',(ctx)=>{
+    if(ctx.from.id ==process.env.ADMIN){
+        saver.deleteCollection()
+        ctx.reply('✅Removed')
+    }
+    
+})
+
+//removing all files sent by a user
+
+bot.command('remall', (ctx) => {
+    msg = ctx.message.text
+    let msgArray = msg.split(' ')
+    msgArray.shift()
+    let text = msgArray.join(' ')
+    console.log(text);
+    let id = parseInt(text)
+    if(ctx.from.id ==process.env.ADMIN|| ctx.from.id == process.env.ADMIN1 || ctx.from.id == process.env.ADMIN2){
+        saver.removeUserFile(id)
+        ctx.reply('✅Removed')
+    }
+})
+
+//broadcasting message to bot users(from last joined to first)
 
 bot.command('send',async(ctx)=>{
     msg = ctx.message.text
@@ -93,7 +135,7 @@ bot.command('send',async(ctx)=>{
     userDetails = await saver.getUser().then((res)=>{
         n = res.length
         userId = []
-        for (i = 0; i < n; i++) {
+        for (i = n-1; i >=0; i--) {
             userId.push(res[i].userId)
         }
 
@@ -119,6 +161,8 @@ bot.command('send',async(ctx)=>{
         }
         if (ctx.from.id == process.env.ADMIN) {
             broadcast(text)
+            ctx.reply('Broadcasting started -(Message is broadcasted from last joined to first)')
+
         }else{
             ctx.replyWithAnimation('https://media.giphy.com/media/fnuSiwXMTV3zmYDf6k/giphy.gif')
         }
@@ -126,61 +170,136 @@ bot.command('send',async(ctx)=>{
     })
 })
 
+//ban user with user id
+
+bot.command('ban', (ctx) => {
+    msg = ctx.message.text
+    let msgArray = msg.split(' ')
+    msgArray.shift()
+    let text = msgArray.join(' ')
+    console.log(text)
+    userId = {
+        id: text
+    }
+    if(ctx.from.id ==process.env.ADMIN){
+        saver.banUser(userId).then((res) => {
+            ctx.reply('banned')
+        })
+    }
+    
+})
+
+//unban user with user id
+
+bot.command('unban', (ctx) => {
+    msg = ctx.message.text
+    let msgArray = msg.split(' ')
+    msgArray.shift()
+    let text = msgArray.join(' ')
+    console.log(text)
+    userId = {
+        id: text
+    }
+    
+
+    if(ctx.from.id ==process.env.ADMIN){
+        saver.unBan(userId).then((res) => {
+            ctx.reply('✅Done')
+        })
+    }
+})
+
 //saving documents to db and generating link
 
-bot.on('document',(ctx)=>{
+bot.on('document', async (ctx) => {
     document = ctx.message.document
     console.log(ctx);
-    fileDetails ={
-        file_name:document.file_name,
-        file_id:document.file_id,
-        caption:ctx.message.caption,
-        file_size:document.file_size,
-        uniqueId:document.file_unique_id
+    fileDetails = {
+        file_name: document.file_name,
+        userId:ctx.from.id,
+        file_id: document.file_id,
+        caption: ctx.message.caption,
+        file_size: document.file_size,
+        uniqueId: document.file_unique_id
     }
-    console.log(fileDetails.caption);
-    saver.saveFile(fileDetails)
-    ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${document.file_unique_id}`)
+    await saver.checkBan(`${ctx.from.id}`).then((res) => {
+        console.log(res);
+        if (res == true) {
+            ctx.reply('⚠YOU ARE BANNED FOR MISUSING BOT, CONTACT ADMIN TO APPEAL')
+        } else {
+            saver.saveFile(fileDetails)
+            ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${document.file_unique_id}`)
+            ctx.replyWithDocument(document.file_id, {
+                chat_id: process.env.LOG_CHANNEL,
+                caption: `${ctx.message.caption}\n\n\nfrom:${ctx.from.id}\nfirstName:${ctx.from.first_name}\nfile_id:${document.file_id}`
+
+            })
+        }
+    })
+
 })
 
-bot.on('video',(ctx)=>{
+//video files
+
+bot.on('video', async(ctx) => {
     video = ctx.message.video
     console.log(ctx);
-    fileDetails ={
-        file_name:video.file_name,
-        file_id:video.file_id,
-        caption:ctx.message.caption,
-        file_size:video.file_size,
-        uniqueId:video.file_unique_id,
-        type:'video'
+    fileDetails = {
+        file_name: video.file_name,
+        userId:ctx.from.id,
+        file_id: video.file_id,
+        caption: ctx.message.caption,
+        file_size: video.file_size,
+        uniqueId: video.file_unique_id,
+        type: 'video'
     }
     console.log(fileDetails.caption);
-    saver.saveFile(fileDetails)
-    ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${video.file_unique_id}`)
-    ctx.replyWithVideo(video.file_id,{
-        chat_id:-1001311265348,
-        caption:ctx.message.caption
+
+    await saver.checkBan(`${ctx.from.id}`).then((res) => {
+        console.log(res);
+        if (res == true) {
+            ctx.reply('⚠YOU ARE BANNED FOR MISUSING BOT, CONTACT ADMIN TO APPEAL')
+        } else {
+            saver.saveFile(fileDetails)
+            ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${video.file_unique_id}`)
+            ctx.replyWithVideo(video.file_id, {
+                chat_id: process.env.LOG_CHANNEL,
+                caption: `${ctx.message.caption}\n\n\nfrom:${ctx.from.id}\nfirstName:${ctx.from.first_name}\nfile_id:${document.file_id}`
+            })
+        }
     })
+
 })
 
-bot.on('audio',(ctx)=>{
+//audio files
+
+bot.on('audio', async(ctx) => {
     audio = ctx.message.audio
     console.log(ctx);
-    fileDetails ={
-        file_name:audio.file_name,
-        file_id:audio.file_id,
-        caption:ctx.message.caption,
-        file_size:audio.file_size,
-        uniqueId:audio.file_unique_id,
-        type:'audio'
+    fileDetails = {
+        file_name: audio.file_name,
+        userId:ctx.from.id,
+        file_id: audio.file_id,
+        caption: ctx.message.caption,
+        file_size: audio.file_size,
+        uniqueId: audio.file_unique_id,
+        type: 'audio'
     }
     console.log(fileDetails.caption);
-    saver.saveFile(fileDetails)
-    ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${audio.file_unique_id}`)
-    ctx.replyWithDocument(audio.file_id,{
-        chat_id:-1001311265348,
-        caption:ctx.message.caption
+    await saver.checkBan(`${ctx.from.id}`).then((res) => {
+        console.log(res);
+        if (res == true) {
+            ctx.reply('⚠YOU ARE BANNED FOR MISUSING BOT, CONTACT ADMIN TO APPEAL')
+        } else {
+            saver.saveFile(fileDetails)
+            ctx.reply(`https://t.me/${process.env.BOTUSERNAME}?start=${audio.file_unique_id}`)
+            ctx.replyWithDocument(audio.file_id, {
+                chat_id: process.env.LOG_CHANNEL,
+                caption: `${ctx.message.caption}\n\n\nfrom:${ctx.from.id}\nfirstName:${ctx.from.first_name}\nfile_id:${document.file_id}`
+            })
+        }
     })
+
 })
 
 //checking bot status only for admins 
