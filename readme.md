@@ -70,14 +70,14 @@ you can remove files 3 ways
 (This will remove all files send to the bot permenantly)
 
 
-3.Send message to users
+<h2>Send message to users</h2>
 
 <code>/send</code> your message to be broadcasted
 
 (You can broadcast text messages to your users ,the message will be send from last joined user to first joined user to reduce spam.Try not to send too many messages at a single time if you have a large number of users)
 
 
-4.How to know total bot users
+<h2>How to know total bot users</h2>
 
 <code>/stats</code>
 
