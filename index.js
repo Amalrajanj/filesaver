@@ -36,7 +36,7 @@ bot.start(async(ctx)=>{
     //welcoming message on /start and if there is a query available we can send files
 
     if(length == 1){
-        ctx.reply(`<b>I will store files for you and give sharable links .I can also make the files available for all users</b>`,{
+        ctx.reply(`<b>Saya akan menyimpan file untuk Anda dan memberikan tautan yang dapat dibagikan. Saya juga dapat membuat file tersedia untuk semua pengguna</b>`,{
             parse_mode:'HTML',
             reply_markup:{
                 inline_keyboard:[
